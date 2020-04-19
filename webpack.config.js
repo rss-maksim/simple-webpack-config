@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const WriteFilePlugin = require('write-file-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 module.exports = {
@@ -36,6 +37,14 @@ module.exports = {
             }, {
                 loader: "sass-loader"
             }]
+          },
+          {
+            test: /\.(png|svg|jpe?g|gif|mp3)$/i,
+            use: [
+              {
+                loader: 'file-loader',
+              },
+            ],
           }
       ]
   },
@@ -44,7 +53,10 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html'
     }),
-    new WriteFilePlugin()
+    new WriteFilePlugin(),
+    new CopyPlugin([
+      { from: './src/assets', to: './assets' },
+    ])
   ],
   devServer: {
     contentBase: './assets',
